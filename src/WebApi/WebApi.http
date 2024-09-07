@@ -1,0 +1,9 @@
+@WebApi_HostAddress = http://localhost:5157/api
+
+GET {{WebApi_HostAddress}}/server/
+Accept: application/json
+
+###
+
+Post {{WebApi_HostAddress}}/server/delete/35b5410b-e380-4eaf-ad03-38cb52d058e3
+Accept: application/json
