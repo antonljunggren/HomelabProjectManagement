@@ -31,6 +31,13 @@ namespace Infrastructure.Persistence
                     .HasMaxLength(45)
                     .IsRequired();
 
+                server.OwnsOne(x => x.ServerSpecifications, specs =>
+                {
+                    specs.Property(s => s.CPU).HasColumnName("specs_cpu");
+                    specs.Property(s => s.RAMGigagabytes).HasColumnName("specs_ram");
+                    specs.Property(s => s.DiskSizeGigabytes).HasColumnName("specs_disk");
+                });
+
                 server.Property<byte>("IsActive")
                     .HasColumnType("BIT")
                     .HasDefaultValue(true)
@@ -54,8 +61,8 @@ namespace Infrastructure.Persistence
             {
                 var servers = new List<Server>()
                 {
-                    new Server("Server1", new ServerIPAddress("192.168.1.1")),
-                    new Server("Server2", new ServerIPAddress("192.168.1.2"))
+                    new Server("Server1", new ServerIPAddress("192.168.1.1"), new ServerSpecifications("i5", 16, 256)),
+                    new Server("Server2", new ServerIPAddress("192.168.1.2"), new ServerSpecifications("i5", 16, 256))
                 };
 
                 context.Servers.AddRange(servers);

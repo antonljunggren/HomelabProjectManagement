@@ -12,11 +12,13 @@ namespace Core.ServerAggregate
     {
         public string Name { get; private set; }
         public ServerIPAddress IPAddress { get; private set; }
+        public ServerSpecifications ServerSpecifications { get; private set; }
 
-        public Server(string name, ServerIPAddress iPAddress)
+        public Server(string name, ServerIPAddress iPAddress, ServerSpecifications serverSpecifications)
         {
             Name = name;
             IPAddress = iPAddress;
+            ServerSpecifications = serverSpecifications;
         }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
@@ -26,6 +28,11 @@ namespace Core.ServerAggregate
         public void UpdateIpAddress(ServerIPAddress newIpAddress)
         {
             IPAddress = newIpAddress;
+        }
+
+        public void UpdateServerSpecifications(ServerSpecifications serverSpecifications)
+        {
+            ServerSpecifications = serverSpecifications;
         }
 
         public void UpdateName(string newName)
