@@ -5,5 +5,34 @@ Accept: application/json
 
 ###
 
-Post {{WebApi_HostAddress}}/server/delete/35b5410b-e380-4eaf-ad03-38cb52d058e3
+Post {{WebApi_HostAddress}}/server/delete/ff400dba-a590-47f9-81a7-95468fdd87fe
 Accept: application/json
+
+###
+
+Post {{WebApi_HostAddress}}/server/create
+Accept: application/json
+Content-Type: application/json
+{
+  "serverName":"Test server 2",
+  "ipAddress": "192.168.1.4",
+  "cpu":"AMD 5600X",
+  "ramGigagabytes": 8,
+  "diskSizeGigabytes": 256
+}
+###
+
+Post {{WebApi_HostAddress}}/server/update
+Accept: application/json
+Content-Type: application/json
+
+{
+  "serverId":"c2863868-d6c3-4664-9757-a60e29c5a367",
+  "serverName":"Test server",
+  "ipAddress": "192.168.1.3",
+  "cpu":"AMD 5600X",
+  "ramGigagabytes": 8,
+  "diskSizeGigabytes": 256
+}
+
+###

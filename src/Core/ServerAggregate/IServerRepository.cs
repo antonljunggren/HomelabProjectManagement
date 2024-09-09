@@ -10,5 +10,7 @@ namespace Core.ServerAggregate
     {
         Task<Server?> GetById(Guid id);
         Task DeleteServer(Guid id);
+        Task<Server> AddServer(Server server);
+        Task<Server> UpdateServer(Server server);
     }
 }

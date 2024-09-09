@@ -31,11 +31,11 @@ namespace Infrastructure.Persistence
                     .HasMaxLength(45)
                     .IsRequired();
 
-                server.OwnsOne(x => x.ServerSpecifications, specs =>
+                server.ComplexProperty(x => x.ServerSpecifications, specs =>
                 {
-                    specs.Property(s => s.CPU).HasColumnName("specs_cpu");
-                    specs.Property(s => s.RAMGigagabytes).HasColumnName("specs_ram");
-                    specs.Property(s => s.DiskSizeGigabytes).HasColumnName("specs_disk");
+                    specs.Property(s => s.CPU).HasColumnName("specs_cpu").IsRequired();
+                    specs.Property(s => s.RAMGigagabytes).HasColumnName("specs_ram").IsRequired();
+                    specs.Property(s => s.DiskSizeGigabytes).HasColumnName("specs_disk").IsRequired();
                 });
 
                 server.Property<byte>("IsActive")

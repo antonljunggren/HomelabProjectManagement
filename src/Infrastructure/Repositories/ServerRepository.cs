@@ -18,6 +18,19 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
+        public async Task<Server> AddServer(Server server)
+        {
+            _context.Add(server);
+            var rows = await _context.SaveChangesAsync();
+
+            if(rows <= 0)
+            {
+                throw new Exception("Server not created!");
+            }
+
+            return server;
+        }
+
         public async Task DeleteServer(Guid id)
         {
             var server = await GetById(id);
@@ -32,6 +45,14 @@ namespace Infrastructure.Repositories
         public async Task<Server?> GetById(Guid id)
         {
             var server = await _context.Servers.SingleOrDefaultAsync(s => s.Id == id);
+            return server;
+        }
+
+        public async Task<Server> UpdateServer(Server server)
+        {
+            _context.Update(server);
+            await _context.SaveChangesAsync();
+
             return server;
         }
     }

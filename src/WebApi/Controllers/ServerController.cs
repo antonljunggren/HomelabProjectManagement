@@ -31,6 +31,22 @@ namespace WebApi.Controllers
             return await _queryDispatcher.Dispatch<GetAllServersQuery, List<Server>>(cmd, cancellationToken);
         }
 
+        [HttpPost("update")]
+        public async Task<IActionResult> UpdateServer([FromBody] UpdateServerCommand serverCmd, CancellationToken cancellationToken)
+        {
+            var server = await _commandDispatcher.Dispatch<UpdateServerCommand, Server>(serverCmd, cancellationToken);
+
+            return Ok(server);
+        }
+
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateServer([FromBody] CreateServerCommand serverCmd, CancellationToken cancellationToken)
+        {
+            var server = await _commandDispatcher.Dispatch<CreateServerCommand, Server>(serverCmd, cancellationToken);
+
+            return Ok(server);
+        }
+
         [HttpPost("delete/{serverId}")]
         public async Task<IActionResult> DeleteServer(Guid serverId, CancellationToken cancellationToken)
         {

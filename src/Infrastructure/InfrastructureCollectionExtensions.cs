@@ -18,6 +18,7 @@ namespace Infrastructure
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
                 opt.UseSqlite("DataSource=:memory:");
+                opt.EnableSensitiveDataLogging();
             }, ServiceLifetime.Singleton);
 
             return services;
