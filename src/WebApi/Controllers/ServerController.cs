@@ -2,6 +2,7 @@
 using Core.Common.Query;
 using Core.ServerAggregate;
 using Core.ServerAggregate.Commands;
+using Core.ServerAggregate.Entites;
 using Core.ServerAggregate.Queries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +55,27 @@ namespace WebApi.Controllers
             await _commandDispatcher.Dispatch<DeleteServerCommand, NoResult>(cmd, cancellationToken);
 
             return Ok();
+        }
+
+        [HttpPost("secrets/add")]
+        public async Task<IActionResult> CreateServerSecret([FromBody] CreateServerSecretCommand secretCmd, CancellationToken cancellationToken)
+        {
+            var secret = await _commandDispatcher.Dispatch<CreateServerSecretCommand, ServerSecret>(secretCmd, cancellationToken);
+            return Ok(secret);
+        }
+
+        [HttpPost("secrets/delete")]
+        public async Task<IActionResult> DeleteServerSecret([FromBody] DeleteServerSecretCommand secretCmd, CancellationToken cancellationToken)
+        {
+            await _commandDispatcher.Dispatch<DeleteServerSecretCommand, NoResult>(secretCmd, cancellationToken);
+            return Ok();
+        }
+
+        [HttpPost("secrets/update")]
+        public async Task<IActionResult> UpdateServerSecret([FromBody] UpdateServerSecretCommand secretCmd, CancellationToken cancellationToken)
+        {
+            var secret = await _commandDispatcher.Dispatch<UpdateServerSecretCommand, ServerSecret>(secretCmd, cancellationToken);
+            return Ok(secret);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Server> AddServer(Server server)
         {
-            _context.Add(server);
+            _context.Servers.Add(server);
             var rows = await _context.SaveChangesAsync();
 
             if(rows <= 0)
@@ -50,7 +50,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Server> UpdateServer(Server server)
         {
-            _context.Update(server);
+            _context.Servers.Update(server);
             await _context.SaveChangesAsync();
 
             return server;

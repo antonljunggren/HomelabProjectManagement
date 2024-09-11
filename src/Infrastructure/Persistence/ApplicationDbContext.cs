@@ -1,5 +1,6 @@
 ﻿using Core.Common;
 using Core.ServerAggregate;
+using Core.ServerAggregate.Entites;
 using Core.ServerAggregate.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,6 +39,35 @@ namespace Infrastructure.Persistence
                     specs.Property(s => s.DiskSizeGigabytes).HasColumnName("specs_disk").IsRequired();
                 });
 
+                server.HasMany(x => x.Secrets)
+                    .WithOne();
+
+                modelBuilder.Entity<ServerSecret>(secret =>
+                {
+                    secret.HasKey(x => x.Id);
+                    secret.Property(x => x.Id).ValueGeneratedNever();
+                    secret.Property(x => x.SecretName)
+                        .IsRequired();
+                    secret.Property(x => x.SecretValue)
+                        .IsRequired();
+
+                    secret.Property<byte>("IsActive")
+                    .HasColumnType("BIT")
+                    .HasDefaultValue(true)
+                    .IsRequired();
+
+                    secret.Property<DateTime>("CreatedDate")
+                        .HasDefaultValue(DateTime.UtcNow)
+                        .IsRequired();
+
+                    secret.Property<DateTime>("ModifiedDate")
+                        .HasDefaultValue(DateTime.UtcNow)
+                        .IsRequired();
+                });
+
+                server.Navigation(x => x.Secrets)
+                    .AutoInclude();
+
                 server.Property<byte>("IsActive")
                     .HasColumnType("BIT")
                     .HasDefaultValue(true)
@@ -52,6 +82,7 @@ namespace Infrastructure.Persistence
                     .IsRequired();
 
                 server.HasQueryFilter(x => EF.Property<byte>(x, "IsActive") == 1);
+                modelBuilder.Entity<ServerSecret>().HasQueryFilter(x => EF.Property<byte>(x, "IsActive") == 1);
             });
         }
 
@@ -59,10 +90,15 @@ namespace Infrastructure.Persistence
         {
             if (!context.Servers.Any())
             {
+                var secrets = new List<ServerSecret>()
+                {
+                    new ServerSecret("Test", "HGkwefn378")
+                };
+
                 var servers = new List<Server>()
                 {
-                    new Server("Server1", new ServerIPAddress("192.168.1.1"), new ServerSpecifications("i5", 16, 256)),
-                    new Server("Server2", new ServerIPAddress("192.168.1.2"), new ServerSpecifications("i5", 16, 256))
+                    new Server("Server1", new ServerIPAddress("192.168.1.1"), new ServerSpecifications("i5", 16, 256), secrets),
+                    new Server("Server2", new ServerIPAddress("192.168.1.2"), new ServerSpecifications("i5", 16, 256), new List<ServerSecret>())
                 };
 
                 context.Servers.AddRange(servers);
@@ -76,7 +112,7 @@ namespace Infrastructure.Persistence
 
         private void HandleSaveChanges()
         {
-            foreach(var entry in ChangeTracker.Entries<IAggregateRoot>())
+            foreach(var entry in ChangeTracker.Entries<Entity>())
             {
                 if(entry.State == EntityState.Deleted)
                 {

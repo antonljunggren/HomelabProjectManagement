@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Core.ServerAggregate.Commands.Handlers
 {
-    public sealed class DeleteServerHandler : ICommandHandler<DeleteServerCommand, NoResult>
+    public sealed class DeleteServerCommandHandler : ICommandHandler<DeleteServerCommand, NoResult>
     {
         private readonly IServerRepository _repository;
 
-        public DeleteServerHandler(IServerRepository repository)
+        public DeleteServerCommandHandler(IServerRepository repository)
         {
             _repository = repository;
         }

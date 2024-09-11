@@ -1,5 +1,6 @@
 ﻿using Core.Common.Commands;
 using Core.Common.Query;
+using Core.ServerAggregate.Entites;
 using Core.ServerAggregate.Queries;
 using Core.ServerAggregate.ValueObjects;
 using System;
@@ -10,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace Core.ServerAggregate.Commands.Handlers
 {
-    public sealed class CreateServerHandler : ICommandHandler<CreateServerCommand, Server>
+    public sealed class CreateServerCommandHandler : ICommandHandler<CreateServerCommand, Server>
     {
         private readonly IServerRepository _repository;
         private readonly IQueryDispatcher _queryDispatcher;
 
-        public CreateServerHandler(IServerRepository repository, IQueryDispatcher queryDispatcher)
+        public CreateServerCommandHandler(IServerRepository repository, IQueryDispatcher queryDispatcher)
         {
             _repository = repository;
             _queryDispatcher = queryDispatcher;
@@ -25,7 +26,7 @@ namespace Core.ServerAggregate.Commands.Handlers
         {
             var ipAddress = new ServerIPAddress(command.IpAddress);
             var serverSpecifications = new ServerSpecifications(command.CPU, command.RAMGigagabytes, command.DiskSizeGigabytes);
-            var server = new Server(command.ServerName, ipAddress, serverSpecifications);
+            var server = new Server(command.ServerName, ipAddress, serverSpecifications, new List<ServerSecret>());
 
             var query = new GetAllServersQuery();
             var allServers = await _queryDispatcher.Dispatch<GetAllServersQuery, List<Server>>(query, cancellationToken);
