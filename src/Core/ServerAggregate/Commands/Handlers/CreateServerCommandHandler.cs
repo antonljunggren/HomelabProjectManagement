@@ -1,5 +1,6 @@
 ﻿using Core.Common.Commands;
 using Core.Common.Query;
+using Core.DTOs;
 using Core.ServerAggregate.Entites;
 using Core.ServerAggregate.Queries;
 using Core.ServerAggregate.ValueObjects;
@@ -29,14 +30,14 @@ namespace Core.ServerAggregate.Commands.Handlers
             var server = new Server(command.ServerName, ipAddress, serverSpecifications, new List<ServerSecret>());
 
             var query = new GetAllServersQuery();
-            var allServers = await _queryDispatcher.Dispatch<GetAllServersQuery, List<Server>>(query, cancellationToken);
+            var allServers = await _queryDispatcher.Dispatch<GetAllServersQuery, List<ServerDto>>(query, cancellationToken);
 
             if(allServers.Any(s => s.Name == command.ServerName))
             {
                 throw new InvalidOperationException($"Server with name [{command.ServerName}] already exists!");
             }
 
-            if (allServers.Any(s => s.IPAddress.Value == command.IpAddress))
+            if (allServers.Any(s => s.IPAddress == command.IpAddress))
             {
                 throw new InvalidOperationException($"Server with IP address [{command.IpAddress}] already exists!");
             }

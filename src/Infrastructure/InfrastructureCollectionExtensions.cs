@@ -5,6 +5,7 @@ using Infrastructure.Commands;
 using Infrastructure.Persistence;
 using Infrastructure.Queries;
 using Infrastructure.Repositories;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -15,9 +16,18 @@ namespace Infrastructure
     {
         public static IServiceCollection AddPersistence(this IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(opt =>
+            var sqlLiteConnection = new SqliteConnection("DataSource=:memory:");
+            sqlLiteConnection.Open();
+
+            services.AddDbContext<WriteDbContext>(opt =>
             {
-                opt.UseSqlite("DataSource=:memory:");
+                opt.UseSqlite(sqlLiteConnection);
+                opt.EnableSensitiveDataLogging();
+            }, ServiceLifetime.Singleton);
+
+            services.AddDbContext<ReadDbContext>(opt =>
+            {
+                opt.UseSqlite(sqlLiteConnection);
                 opt.EnableSensitiveDataLogging();
             }, ServiceLifetime.Singleton);
 

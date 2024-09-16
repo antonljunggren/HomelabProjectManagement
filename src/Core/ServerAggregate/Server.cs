@@ -15,7 +15,7 @@ namespace Core.ServerAggregate
         public ServerIPAddress IPAddress { get; private set; }
         public ServerSpecifications ServerSpecifications { get; private set; }
         private ICollection<ServerSecret> _secrets;
-        public IReadOnlyList<ServerSecret> Secrets => _secrets.ToList();
+        public IReadOnlyList<ServerSecret> Secrets => _secrets.ToList().AsReadOnly();
 
         public Server(string name, ServerIPAddress iPAddress, ServerSpecifications serverSpecifications, ICollection<ServerSecret> secrets)
         {

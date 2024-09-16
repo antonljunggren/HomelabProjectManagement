@@ -27,12 +27,12 @@ namespace WebApi
 
             //app.UseHttpsRedirection();
 
-            using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            using(var scope = app.Services.CreateScope())
             {
-                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                context.Database.OpenConnection();
-                context.Database.EnsureCreated();
-                ApplicationDbContext.SeedData(context);
+                var writeContext = scope.ServiceProvider.GetRequiredService<WriteDbContext>();
+                writeContext.Database.OpenConnection();
+                writeContext.Database.EnsureCreated();
+                WriteDbContext.SeedData(writeContext);
             }
 
             app.UseAuthorization();

@@ -11,9 +11,9 @@ namespace Infrastructure.Repositories
 {
     internal sealed class ServerRepository : IServerRepository
     {
-        private ApplicationDbContext _context;
+        private WriteDbContext _context;
 
-        public ServerRepository(ApplicationDbContext context)
+        public ServerRepository(WriteDbContext context)
         {
             _context = context;
         }

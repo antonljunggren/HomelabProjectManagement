@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence
 {
-    public sealed class ApplicationDbContext : DbContext
+    public sealed class WriteDbContext : DbContext
     {
         internal DbSet<Server> Servers { get; set; }
 
-        public ApplicationDbContext(DbContextOptions options) : base(options)
+        public WriteDbContext(DbContextOptions<WriteDbContext> options) : base(options)
         {
         }
 
@@ -86,7 +86,7 @@ namespace Infrastructure.Persistence
             });
         }
 
-        public static void SeedData(ApplicationDbContext context)
+        public static void SeedData(WriteDbContext context)
         {
             if (!context.Servers.Any())
             {

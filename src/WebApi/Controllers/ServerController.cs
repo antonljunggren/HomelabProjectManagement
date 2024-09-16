@@ -1,5 +1,6 @@
 ﻿using Core.Common.Commands;
 using Core.Common.Query;
+using Core.DTOs;
 using Core.ServerAggregate;
 using Core.ServerAggregate.Commands;
 using Core.ServerAggregate.Entites;
@@ -25,11 +26,11 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Server>> GetAll(CancellationToken cancellationToken)
+        public async Task<IEnumerable<ServerDto>> GetAll(CancellationToken cancellationToken)
         {
             var cmd = new GetAllServersQuery();
 
-            return await _queryDispatcher.Dispatch<GetAllServersQuery, List<Server>>(cmd, cancellationToken);
+            return await _queryDispatcher.Dispatch<GetAllServersQuery, List<ServerDto>>(cmd, cancellationToken);
         }
 
         [HttpPost("update")]
@@ -37,7 +38,7 @@ namespace WebApi.Controllers
         {
             var server = await _commandDispatcher.Dispatch<UpdateServerCommand, Server>(serverCmd, cancellationToken);
 
-            return Ok(server);
+            return Ok(ServerDto.FromDomain(server));
         }
 
         [HttpPost("create")]
@@ -45,7 +46,7 @@ namespace WebApi.Controllers
         {
             var server = await _commandDispatcher.Dispatch<CreateServerCommand, Server>(serverCmd, cancellationToken);
 
-            return Ok(server);
+            return Ok(ServerDto.FromDomain(server));
         }
 
         [HttpPost("delete/{serverId}")]
@@ -61,7 +62,7 @@ namespace WebApi.Controllers
         public async Task<IActionResult> CreateServerSecret([FromBody] CreateServerSecretCommand secretCmd, CancellationToken cancellationToken)
         {
             var secret = await _commandDispatcher.Dispatch<CreateServerSecretCommand, ServerSecret>(secretCmd, cancellationToken);
-            return Ok(secret);
+            return Ok(ServerSecretDto.FromDomain(secret));
         }
 
         [HttpPost("secrets/delete")]
@@ -75,7 +76,7 @@ namespace WebApi.Controllers
         public async Task<IActionResult> UpdateServerSecret([FromBody] UpdateServerSecretCommand secretCmd, CancellationToken cancellationToken)
         {
             var secret = await _commandDispatcher.Dispatch<UpdateServerSecretCommand, ServerSecret>(secretCmd, cancellationToken);
-            return Ok(secret);
+            return Ok(ServerSecretDto.FromDomain(secret));
         }
     }
 }
