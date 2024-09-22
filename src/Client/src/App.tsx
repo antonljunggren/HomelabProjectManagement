@@ -1,7 +1,5 @@
 import type { Component } from 'solid-js';
 
-import logo from './logo.svg';
-import styles from './App.module.css';
 import Navbar from './components/Navbar';
 import { Route, Router } from '@solidjs/router';
 import Home from './pages/Home';
