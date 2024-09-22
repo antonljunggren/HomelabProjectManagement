@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace Core.ServerAggregate.Commands.Handlers
 {
-    public sealed class UpdateSererCommandHandler : ICommandHandler<UpdateServerCommand, Server>
+    public sealed class UpdateServerCommandHandler : ICommandHandler<UpdateServerCommand, Server>
     {
         private readonly IServerRepository _repository;
         private readonly IQueryDispatcher _queryDispatcher;
 
-        public UpdateSererCommandHandler(IServerRepository repository, IQueryDispatcher queryDispatcher)
+        public UpdateServerCommandHandler(IServerRepository repository, IQueryDispatcher queryDispatcher)
         {
             _repository = repository;
             _queryDispatcher = queryDispatcher;
@@ -35,12 +35,12 @@ namespace Core.ServerAggregate.Commands.Handlers
 
             var allServers = await _queryDispatcher.Dispatch<GetAllServersQuery, List<ServerDto>>(new(), cancellationToken);
 
-            if (allServers.Any(s => s.Name == command.ServerName))
+            if (allServers.Any(s => s.Name == command.ServerName && s.Id != command.ServerId))
             {
                 throw new InvalidOperationException($"Server with name [{command.ServerName}] already exists!");
             }
 
-            if (allServers.Any(s => s.IPAddress == command.IpAddress))
+            if (allServers.Any(s => s.IPAddress == command.IpAddress && s.Id != command.ServerId))
             {
                 throw new InvalidOperationException($"Server with IP address [{command.IpAddress}] already exists!");
             }
