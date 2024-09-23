@@ -1,4 +1,5 @@
-﻿using Core.Common.Commands;
+﻿using Core.ApplicationAggregate;
+using Core.Common.Commands;
 using Core.Common.Query;
 using Core.ServerAggregate;
 using Infrastructure.Commands;
@@ -37,6 +38,7 @@ namespace Infrastructure
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IServerRepository, ServerRepository>();
+            services.AddScoped<IApplicationRepository, ApplicationRepository>();
 
             return services;
         }

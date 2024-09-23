@@ -36,3 +36,19 @@ Content-Type: application/json
 }
 
 ###
+
+GET {{WebApi_HostAddress}}/application/
+Accept: application/json
+
+###
+
+Post {{WebApi_HostAddress}}/application/create
+Accept: application/json
+Content-Type: application/json
+
+{
+  "applicationName":"Test App 2",
+  "serverId":"d8a05135-0779-4289-be22-12079b18db72",
+  "port": "555",
+  "codeRepository": "https://github.com/githubtraining/hellogitworld"
+}

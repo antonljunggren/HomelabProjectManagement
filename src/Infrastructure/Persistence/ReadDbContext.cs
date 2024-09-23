@@ -11,6 +11,7 @@ namespace Infrastructure.Persistence
     internal sealed class ReadDbContext : DbContext
     {
         public DbSet<ServerDto> Servers { get; set; }
+        public DbSet<ApplicationDTO> Applications { get; set; }
         public ReadDbContext(DbContextOptions<ReadDbContext> options) : base(options)
         {
         }
@@ -52,6 +53,20 @@ namespace Infrastructure.Persistence
 
                 server.HasQueryFilter(x => EF.Property<byte>(x, "IsActive") == 1);
                 modelBuilder.Entity<ServerSecretDto>().HasQueryFilter(x => EF.Property<byte>(x, "IsActive") == 1);
+            });
+
+
+            modelBuilder.Entity<ApplicationDTO>(app =>
+            {
+                app.ToTable("Applications");
+                app.HasKey(a => a.Id);
+
+                app.Property<byte>("IsActive")
+                    .HasColumnType("BIT")
+                    .HasDefaultValue(true)
+                    .IsRequired();
+
+                app.HasQueryFilter(a => EF.Property<byte>(a, "IsActive") == 1);
             });
         }
 
