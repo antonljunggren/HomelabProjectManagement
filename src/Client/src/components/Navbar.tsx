@@ -1,5 +1,6 @@
 import { Accessor, createSignal, For, Match, Setter, Switch, type Component } from 'solid-js';
 import { useAppState } from './AppState';
+import ApplicationNavbarItem from './navbar/ApplicationNavbarItem';
 
 enum SelectedTab {
     Servers,
@@ -20,7 +21,7 @@ const NavbarTab : Component<{tabType: SelectedTab, selectedTab: Accessor<Selecte
 }
 
 const Navbar : Component = () => {
-    const[selectedTab, setSelectedTab] = createSignal(SelectedTab.Servers);
+    const[selectedTab, setSelectedTab] = createSignal(SelectedTab.Applications);
     const store = useAppState();
     return(
         <div class='pl-2 pt-2 bg-gray-800 max-w-80 text-gray-200'>
@@ -56,7 +57,15 @@ const Navbar : Component = () => {
                         </ul>
                     </Match>
                     <Match when={selectedTab() === SelectedTab.Applications}>
-                        <p>Applications geegaaafwf fefewfef ejkfbswhjfbjfbefbf</p>
+                        <ul>
+                            <For each={store?.state.applications} fallback={<></>}>
+                                {(application, index) => (
+                                    <ApplicationNavbarItem 
+                                        application={application} 
+                                        server={store?.state.servers.find(s => s.id === application.serverId)}/>
+                                )}
+                            </For>
+                        </ul>
                     </Match>
                     <Match when={selectedTab() === SelectedTab.Projects}>
                         <p>Projects gehrthaw fefsesrgg tyhhr fefewfef ejkfbswhjfbjfbefbf</p>

@@ -2,7 +2,7 @@ import { useNavigate, useParams } from '@solidjs/router';
 import { createEffect, createMemo, createSignal, For, Show, type Component } from 'solid-js';
 import { useAppState } from '../components/AppState';
 import { Server, ServerSecret, ServerSpecification } from '../models/Server';
-import { createServerCmd, createSeverSecretCmd, deleteSeverSecretCmd, updateServerCmd, updateSeverSecretCmd } from '../utils/ServerRequests';
+import { createServerCmd, createServerSecretCmd, deleteServerSecretCmd, updateServerCmd, updateServerSecretCmd } from '../utils/Requests';
 import DeletePrompt from '../components/DeletePrompt';
 import CreateSecretPrompt from '../components/CreateSecretPrompt';
 
@@ -59,7 +59,7 @@ const ServerPage : Component = () => {
                 diskSizeGigabytes: tempEditServer().serverSpecifications?.diskSizeGigabytes ?? 0
             };
 
-            const createdServer = store?.createServer(cmd);
+            const createdServer = store?.serverActions.createServer(cmd);
             createdServer?.then((s) => {
                 navigate('/server/'+s.id, {replace: true});
             });
@@ -75,26 +75,26 @@ const ServerPage : Component = () => {
                 diskSizeGigabytes: tempEditServer().serverSpecifications?.diskSizeGigabytes ?? 0,
             };
 
-            store?.updateServer(cmd);
+            store?.serverActions.updateServer(cmd);
             setIsEditing(false);
         }
     };
 
     const handleDeleteServer = () => {
         if(server()) {
-            store?.deleteServer(server()?.id ?? '');
+            store?.serverActions.deleteServer(server()?.id ?? '');
         }
     }
 
     const handleSecretSave = () => {
         if(tempSecretToEdit()) {
-            const cmd : updateSeverSecretCmd = {
+            const cmd : updateServerSecretCmd = {
                 serverId: server()?.id ?? '',
                 secretId: tempSecretToEdit()?.id ?? '',
                 secretValue: tempSecretToEdit()?.secretValue ?? ''
             }
 
-            store?.updateServerSecret(cmd);
+            store?.serverActions.updateServerSecret(cmd);
             setSecretToEdit(undefined);
         }
     };
@@ -109,13 +109,13 @@ const ServerPage : Component = () => {
     };
 
     const createSecretModalCallback = (secretName:string, secretValue:string) => {
-        const cmd: createSeverSecretCmd = {
+        const cmd: createServerSecretCmd = {
             serverId: server()?.id ?? '',
             secretName: secretName,
             secretValue: secretValue
         };
 
-        store?.createServerSecret(cmd);
+        store?.serverActions.createServerSecret(cmd);
         setShowCreateSecretModal(false);
     };
 
@@ -130,12 +130,12 @@ const ServerPage : Component = () => {
     const handleDeleteServerSecret = (secretId: string) => {
         if(server()) {
 
-            const cmd : deleteSeverSecretCmd = {
+            const cmd : deleteServerSecretCmd = {
                 serverId: server()?.id ?? '',
                 secretId: secretId,
             }
 
-            store?.deleteServerSecret(cmd);
+            store?.serverActions.deleteServerSecret(cmd);
         }
     };
 
