@@ -55,7 +55,7 @@ namespace WebApi.Controllers
             var cmd = new DeleteServerCommand(serverId);
             await _commandDispatcher.Dispatch<DeleteServerCommand, NoResult>(cmd, cancellationToken);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpPost("secrets/add")]
@@ -69,7 +69,7 @@ namespace WebApi.Controllers
         public async Task<IActionResult> DeleteServerSecret([FromBody] DeleteServerSecretCommand secretCmd, CancellationToken cancellationToken)
         {
             await _commandDispatcher.Dispatch<DeleteServerSecretCommand, NoResult>(secretCmd, cancellationToken);
-            return Ok();
+            return NoContent();
         }
 
         [HttpPost("secrets/update")]

@@ -43,7 +43,7 @@ namespace Core.ApplicationAggregate
                 throw new ArgumentOutOfRangeException($"A port cannot be {port}, must be < {ushort.MaxValue} and > 0");
             }
 
-            port = (ushort)port;
+            Port = (ushort)port;
         }
 
         public void UpdateName(string newName)
